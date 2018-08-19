@@ -1,0 +1,68 @@
+<div class="row">
+  <div class="col-sm-12">
+    <form #signUpForm="ngForm" class="form-horizontal" (ngSubmit)="onFormSubmit(signUpForm)">
+      <fieldset>
+        <legend>SignUp</legend>
+        <!-- Email block -->
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" name="email" id="email" placeholder="Email" #email="ngModel" [(ngModel)]="user.email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            required>
+        </div>
+        <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+          <div *ngIf="email.errors?.required">
+            Email field can't be blank
+          </div>
+          <div *ngIf="email.errors?.pattern && email.touched">
+            The email id doesn't seems right.
+          </div>
+        </div>
+
+        <!-- Password block -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" class="form-control" name="password" id="password" placeholder="Password" #password="ngModel" [(ngModel)]="user.password.pwd" minLength="8" required>
+        </div>
+
+        <div class="form-gropu">
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" class="form-control" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" [(ngModel)]="user.password.confirmPassword" minLength="8"
+            required>
+        </div>
+
+        <div *ngIf="(password.invalid|| password.value?.pwd != password.value?.confirmPwd) && (password.touched)"
+          class="alert alert-danger">
+
+          <div *ngIf="password.invalid; else nomatch">
+            Password needs to be more than 8 characters
+          </div>
+          <ng-template #nomatch>
+            Passwords don't match
+          </ng-template>
+        </div>
+
+        <!-- Gender block   -->
+        <div class="form-group">
+          <label for="select">Gender</label>
+          <select name="select" id="select" class="form-control" [(ngModel)]="user.gender" required>
+            <option *ngFor="let g of gender" value="{{g}}">{{g}}</option>
+          </select>
+        </div>
+
+        <!-- Terms & Condition -->
+        <div class="form-group checkbox">
+          <label>
+            <input type="checkbox" name="terms" class="form-control" [(ngModel)]="user.terms" required> Confirm that you've read the Terms and Conditions
+          </label>
+        </div>
+
+        <!-- Buttons block -->
+        <div class="form-group">
+          <button type="reset" class="btn btn-default">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!signUpForm.form.valid">Submit</button>
+        </div>
+      </fieldset>
+    </form>
+    {{user | json}}
+  </div>
+</div>
